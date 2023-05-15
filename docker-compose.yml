@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: agat
+    ports:
+      - 5440:5432
+    volumes:
+      - db-data:/var/lib/postgresql/agat_data
+
+  db_test:
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test_db
+    ports:
+      - 5441:5432
+    volumes:
+      - db-data:/var/lib/postgresql/test_data
+volumes:
+  db-data:

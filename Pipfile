@@ -1,0 +1,31 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+alembic = "*"
+pydantic = "*"
+dependency-injector = "*"
+loguru = "*"
+pytest = "*"
+graypy = "*"
+sqlalchemy = "*"
+flake8 = "*"
+python-dotenv = "*"
+async-sqlalchemy = "*"
+greenlet = "*"
+python-multipart = "*"
+psycopg2-binary = "*"
+requests = "*"
+httpx = "*"
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+pre-commit = "*"
+
+[requires]
+python_version = "3.11"
