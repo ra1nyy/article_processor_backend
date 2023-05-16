@@ -14,8 +14,9 @@ class User(ModelBase):
 
     place_of_study: str
     study_group_number: str
-    place_of_work: str
-    social_network_url: str
+
+    place_of_work: str | None = None
+    social_network_url: str | None = None
 
     role: UserRoleEnum = UserRoleEnum.USER
     created_at: datetime = datetime.utcnow()

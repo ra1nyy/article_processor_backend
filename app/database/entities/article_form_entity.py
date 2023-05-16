@@ -1,12 +1,15 @@
 import sqlalchemy as sa
+from sqlalchemy.orm import Mapped, relationship
 
 from app.database.base import Base
+from app.database.entities.user_entity import UserEntity
 from app.database.entity_base import EntityBase
+from app.models.article_form.article_form_request import ArticleFormDomain
 
 
-class ArticleFormEntity(Base, EntityBase[...]):
+class ArticleFormEntity(Base, EntityBase[ArticleFormDomain]):
     __tablename__ = "article_form"
-    model = ...
+    model = ArticleFormDomain
 
     id = sa.Column(sa.INTEGER, sa.Identity(), primary_key=True, nullable=False)
 
@@ -41,3 +44,10 @@ class ArticleFormEntity(Base, EntityBase[...]):
         server_default=sa.func.now(),
         server_onupdate=sa.func.now(),
     )
+
+    authors: Mapped[list[UserEntity]] = relationship(
+        "UserEntity",
+        secondary="article_author",
+        lazy="joined",
+    )
+

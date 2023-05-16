@@ -21,18 +21,18 @@ class EntityBase(Generic[Model]):
     @classmethod
     def from_model(cls: Type[Entity], model: Model) -> Entity:
         # TODO:
-        # data_values = {}
-        # colls = inspect(cls).mapper.column_attrs
-        # for coll in colls:
-        #     col_name = coll.key
-        #     print(col_name)
-        #     try:
-        #         data_values[col_name] = getattr(model, col_name)
-        #     except AttributeError:
-        #         pass  # noqa: WPS420
-        # return cls(**data_values)
+        data_values = {}
+        colls = inspect(cls).mapper.column_attrs
+        for coll in colls:
+            col_name = coll.key
+            print(col_name)
+            try:
+                data_values[col_name] = getattr(model, col_name)
+            except AttributeError:
+                pass  # noqa: WPS420
+        return cls(**data_values)
 
-        return cls(**model.dict())
+        # return cls(**model.dict())
 
     @classmethod
     def values_from_model(cls: Type[Entity], model: Model) -> dict:

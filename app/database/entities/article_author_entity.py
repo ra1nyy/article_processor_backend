@@ -5,7 +5,7 @@ from app.database.entity_base import EntityBase
 
 
 class ArticleAutorEntity(Base, EntityBase[...]):
-    __tablename__ = "article_autor"
+    __tablename__ = "article_author"
     model = ...
 
     id = sa.Column(sa.INTEGER, sa.Identity(), primary_key=True, nullable=False)

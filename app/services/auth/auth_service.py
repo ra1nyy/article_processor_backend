@@ -24,8 +24,12 @@ class AuthService(BaseService[User]):
         super().__init__(config=config, repository=repository, logger=logger)
         self.user_service = user_service
 
-    async def login(self, username: str, password: str, ip: str) -> Token:
+    async def login(self, username: str, password: str) -> Token:
+        print('before')
+
         user = await self.user_service.get_by_username(username)
+
+        print('after')
 
         if not user:
             self.logger.exception('Entity "User" not found')
@@ -39,7 +43,7 @@ class AuthService(BaseService[User]):
         user.last_login = datetime.utcnow()
         await self.user_service.save(user)
 
-        return await self.create_token(user.id, ip)
+        return await self.create_token(user.id)
 
     async def refresh_token(self, refresh_token: str) -> Token:
         session: UserSession = await self.get_user_session_by_refresh_token(
@@ -79,7 +83,7 @@ class AuthService(BaseService[User]):
     async def get_user_by_session(self, session: UserSession) -> UserRaw | None:
         return await self.user_service.get_by_id(session.user_id)
 
-    async def create_token(self, user_id: int, ip: str) -> Token:
+    async def create_token(self, user_id: int) -> Token:
         session = None
         session_exists = True
         while session_exists:
@@ -87,7 +91,6 @@ class AuthService(BaseService[User]):
             refresh_token = self.get_token_string()
             session = UserSession(
                 user_id=user_id,
-                ip=ip,
                 token=token,
                 token_expired_at=self.get_expired_at(),
                 refresh_token=refresh_token,
@@ -110,12 +113,16 @@ class AuthService(BaseService[User]):
         )
 
     def get_expired_at(self):
-        return datetime.utcnow() + timedelta(
+        print(datetime.utcnow())
+        print(datetime.now() + timedelta(
+            minutes=self.config.session_expired_minutes,
+        ))
+        return datetime.now() + timedelta(
             minutes=self.config.session_expired_minutes,
         )
 
     def get_refresh_token_expired_at(self):
-        return datetime.utcnow() + timedelta(
+        return datetime.now() + timedelta(
             days=self.config.refresh_token_expired_days,
         )
 

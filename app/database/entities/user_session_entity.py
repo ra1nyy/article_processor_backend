@@ -20,4 +20,3 @@ class UserSessionEntity(Base, EntityBase[UserSession]):
     token_expired_at = sa.Column(sa.TIMESTAMP(True), nullable=False)
 
     refresh_token_expired_at = sa.Column(sa.TIMESTAMP(True))
-    ip = sa.Column(sa.String)

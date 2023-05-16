@@ -2,6 +2,7 @@ from typing import Set
 
 from dependency_injector import containers, providers
 
+from app.core.containers_uitils.article_form import get_article_form_service
 from app.core.containers_uitils.auth_service import get_auth_service
 from app.core.containers_uitils.base import get_database, get_di_config, get_di_logger
 from app.core.containers_uitils import (
@@ -30,6 +31,13 @@ class Container(containers.DeclarativeContainer):
         user_service=user_service,
         config=config,
         logger=logger,
+    )
+    article_form_service = get_article_form_service(
+        providers=providers,
+        session=database.provided.session,
+        config=config,
+        logger=logger,
+        user_service=user_service,
     )
     # ---------- Services end ---------- #
 

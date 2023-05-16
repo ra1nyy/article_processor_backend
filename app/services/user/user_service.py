@@ -13,8 +13,14 @@ class UserService(BaseService[UserRaw]):
     async def get_users(self) -> list[User]:
         return await self.repository.get_all()
 
+    async def get_users_by_list_ids(self, list_ids: list) -> list[User]:
+        print('therererere!')
+        return await self.repository.get_users_by_ids(user_ids=list_ids)
+
     async def get_by_username(self, username: str) -> UserRaw | None:
+        print('111')
         user = await self.repository.get_by_username(username)
+        print('222')
 
         if not user:
             self.logger.exception('Entity "User" not found')

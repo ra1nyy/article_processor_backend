@@ -16,9 +16,11 @@ class BaseRepository(Generic[Model]):
     def __init__(self, db_session):
         self.db_session = db_session
 
-    async def create(self, model: Model) -> Model:
+    async def create(self, model: ModelBase) -> Model:
         async with self.db_session() as session:
+            print('therererer')
             entity = self.entity.from_model(model)
+            print(f'LOL KEK {entity = }')
             session.add(entity)
             await session.commit()
 

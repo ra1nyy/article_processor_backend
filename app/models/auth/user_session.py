@@ -10,7 +10,6 @@ class UserSession(ModelBase):
     refresh_token: str
     token_expired_at: datetime
     refresh_token_expired_at: datetime | None = None
-    ip: str
 
     class Config:
         orm_mode = True

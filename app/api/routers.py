@@ -6,6 +6,7 @@ from app.routers import (
     user_router,
     auth_router,
 )
+from app.routers.article_form.artucle_form_router import article_form_router
 
 inject_module(__name__)
 
@@ -20,6 +21,7 @@ def add_routers(app: FastAPI):
     routers = [
         user_router,
         auth_router,
+        article_form_router,
     ]
     _add_routers(app, routers)
 

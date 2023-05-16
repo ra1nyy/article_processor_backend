@@ -25,7 +25,6 @@ auth_router = CustomApiRouter(
 )
 @inject
 async def auth(
-    request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
     auth_service: AuthService = Depends(Provide[Container.auth_service]),
 ):
@@ -35,7 +34,6 @@ async def auth(
     return await auth_service.login(
         form_data.username,
         form_data.password,
-        request.client.host,
     )
 
 
