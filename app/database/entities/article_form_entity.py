@@ -22,14 +22,45 @@ class ArticleFormEntity(Base, EntityBase[ArticleFormDomain]):
     scientific_adviser_institute = sa.Column(sa.VARCHAR, nullable=True)
     scientific_adviser_department = sa.Column(sa.VARCHAR, nullable=True)
 
-    formatted_docs_filename = sa.Column(
+    formatted_docs_id = sa.Column(
         sa.INTEGER,
         sa.ForeignKey("file.id", onupdate="RESTRICT", ondelete="RESTRICT"),
         nullable=True,
     )
-    attached_docs_filename = sa.Column(
+    attached_docs_id = sa.Column(
         sa.INTEGER,
         sa.ForeignKey("file.id", onupdate="RESTRICT", ondelete="RESTRICT"),
+        nullable=True,
+    )
+    list_of_references = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
+
+    keywords_rus = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
+    keywords_eng = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
+
+    title_rus = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
+    title_eng = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
+
+    abstract_rus = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
+    abstract_eng = sa.Column(
+        sa.VARCHAR,
         nullable=True,
     )
 

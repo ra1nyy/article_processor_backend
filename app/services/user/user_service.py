@@ -13,14 +13,18 @@ class UserService(BaseService[UserRaw]):
     async def get_users(self) -> list[User]:
         return await self.repository.get_all()
 
+    async def get_all_students(self) -> list[User]:
+        return await self.repository.get_all_students()
+
     async def get_users_by_list_ids(self, list_ids: list) -> list[User]:
-        print('therererere!')
-        return await self.repository.get_users_by_ids(user_ids=list_ids)
+        users = await self.repository.get_users_by_ids(user_ids=list_ids)
+        if not users:
+            raise EntityNotFound('User')
+
+        return users
 
     async def get_by_username(self, username: str) -> UserRaw | None:
-        print('111')
         user = await self.repository.get_by_username(username)
-        print('222')
 
         if not user:
             self.logger.exception('Entity "User" not found')
@@ -35,19 +39,17 @@ class UserService(BaseService[UserRaw]):
         self,
         update_user_request: UserUpdate,
         user_id: int,
-        user_role: UserRoleEnum,
     ) -> User:
+        print(update_user_request.dict())
         update_user_request_with_id = UserUpdate(
-            **update_user_request.dict(exclude={"id", "role"}),
+            **update_user_request.dict(exclude={'id'}),
             id=user_id,
-            role=user_role,
         )
-        user = await self.repository.update(
-            update_user_request_with_id
-        )  # TODO: fix generic hint
+        user = await self.repository.update(update_user_request_with_id)
+
         if not user:
-            self.logger.exception('Entity "User" not found')
             raise EntityNotFound("User")
+
         return user
 
     async def save(self, user: UserRaw | User):

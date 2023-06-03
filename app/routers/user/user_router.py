@@ -41,6 +41,22 @@ async def get_profile(
     return await user_service.get_by_username(current_user.username)
 
 
+@user_router.get(
+    "/get_all_students",
+    response_model=list[User],
+)
+@check_by_role()
+@inject
+async def get_all_students(
+    current_user: User = Depends(oauth_scheme),
+    user_service: UserService = Depends(Provide[Container.user_service]),
+):
+    """
+    Возвращает все данные о пользователе за исключением хеша пароля.
+    """
+    return await user_service.get_all_students()
+
+
 @user_router.put(
     "/profile",
     response_model=UserResponse,
@@ -64,5 +80,4 @@ async def update_profile(
     return await user_service.update_user(
         profile_update,
         current_user.id,
-        current_user.role,  # type: ignore
     )

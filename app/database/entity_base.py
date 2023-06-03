@@ -25,7 +25,6 @@ class EntityBase(Generic[Model]):
         colls = inspect(cls).mapper.column_attrs
         for coll in colls:
             col_name = coll.key
-            print(col_name)
             try:
                 data_values[col_name] = getattr(model, col_name)
             except AttributeError:

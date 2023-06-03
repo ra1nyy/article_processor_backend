@@ -2,11 +2,12 @@ import sqlalchemy as sa
 
 from app.database.base import Base
 from app.database.entity_base import EntityBase
+from app.models.file.article_form_request import FileDomain
 
 
-class FileEntity(Base, EntityBase[...]):
+class FileEntity(Base, EntityBase[FileDomain]):
     __tablename__ = "file"
-    model = ...
+    model = FileDomain
 
     id = sa.Column(sa.INTEGER, sa.Identity(), primary_key=True, nullable=False)
 

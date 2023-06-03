@@ -2,6 +2,7 @@ from typing import TypeVar, Generic
 
 from sqlalchemy import String, cast, or_, update, select, delete, func
 
+from app.api.errors import EntityNotFound
 from app.database.entity_base import OrmModel
 from app.models.mode_base import ModelBase, UpdateBase
 
@@ -18,9 +19,7 @@ class BaseRepository(Generic[Model]):
 
     async def create(self, model: ModelBase) -> Model:
         async with self.db_session() as session:
-            print('therererer')
             entity = self.entity.from_model(model)
-            print(f'LOL KEK {entity = }')
             session.add(entity)
             await session.commit()
 
@@ -73,8 +72,9 @@ class BaseRepository(Generic[Model]):
             await session.commit()
 
     async def get_entity_by_id(
-        self, model_id: int, entity_instance, model_instance=None
-    ):
+        self, model_id: int, entity_instance=None, model_instance=None
+    ) -> Model:
+        entity_instance = entity_instance if entity_instance else self.entity
         async with self.db_session() as session:
             query = (
                 select(entity_instance).limit(1).where(entity_instance.id == model_id)
@@ -114,6 +114,9 @@ class BaseRepository(Generic[Model]):
             session.add(entity)
 
     def model_or_none(self, entity, model=None):
+        if not entity:
+            raise EntityNotFound(self.entity.__name__)
+
         if not model:
             return entity.to_model() if entity else None
         return model.from_orm(entity) if entity else None

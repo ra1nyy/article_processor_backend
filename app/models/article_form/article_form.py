@@ -1,9 +1,3 @@
-from datetime import datetime
-
-from pydantic import Field, validator
-
-from app.api.errors import WrongDataError
-from app.models import User
 from app.models.mode_base import ModelBase
 
 
@@ -19,15 +13,19 @@ class ArticleFormBase(ModelBase):
     scientific_adviser_institute: str = None
     scientific_adviser_department: str = None
 
-    # formatted_docs_filename: str | None = None
-    # attached_docs_filename: str | None = None
-    # attached_article_text: str | None = None
+    attached_article_text: str | None = None
+    attached_docs_id: int | None = None
 
-    created_at: datetime | None = Field(
-        default=datetime.utcnow(),
-        description="Дата создания операции",
-    )
-    updated_at: datetime = None
+    list_of_references: str | None = None
+
+    keywords_rus: str | None = None
+    keywords_eng: str | None = None
+
+    abstract_rus: str | None = None
+    abstract_eng: str | None = None
+
+    title_rus: str | None = None
+    title_eng: str | None = None
 
     # @validator('attached_docs_filename')
     # def validate_attached_docs(cls, value, values: dict):

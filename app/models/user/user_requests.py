@@ -1,12 +1,16 @@
 from app.models.mode_base import UpdateBase
-from app.models.user.user import UserRoleEnum
 
 
 class UserUpdate(UpdateBase):
-    id: int | None = None
     first_name: str | None = None
     last_name: str | None = None
-    middle_name: str | None = None
+    surname: str | None = None
+
     username: str | None = None
-    is_active: bool | None = None
-    role: UserRoleEnum | None = None
+    email: str | None = None
+
+    place_of_study: str | None = None
+    study_group_number: str | None = None
+
+    place_of_work: str | None = None
+    social_network_url: str | None = None

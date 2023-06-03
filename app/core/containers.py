@@ -8,6 +8,8 @@ from app.core.containers_uitils.base import get_database, get_di_config, get_di_
 from app.core.containers_uitils import (
     get_user_service,
 )
+from app.core.containers_uitils.doc_service import get_doc_service
+from app.core.containers_uitils.file_service import get_file_service
 
 modules: Set = set()
 
@@ -32,12 +34,23 @@ class Container(containers.DeclarativeContainer):
         config=config,
         logger=logger,
     )
+    doc_service = get_doc_service(
+        providers=providers,
+    )
+    file_service = get_file_service(
+        providers=providers,
+        session=database.provided.session,
+        config=config,
+        logger=logger,
+        doc_service=doc_service,
+    )
     article_form_service = get_article_form_service(
         providers=providers,
         session=database.provided.session,
         config=config,
         logger=logger,
         user_service=user_service,
+        file_service=file_service,
     )
     # ---------- Services end ---------- #
 

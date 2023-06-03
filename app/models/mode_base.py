@@ -33,7 +33,7 @@ class ModelBase(BaseModel):
 
 
 class UpdateBase(ModelBase):
-    id: int
+    id: int | None = None
 
     def __init__(self, **data):
         super().__init__(**data)

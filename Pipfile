@@ -21,6 +21,8 @@ python-multipart = "*"
 psycopg2-binary = "*"
 requests = "*"
 httpx = "*"
+aiofiles = "*"
+python-docx = "*"
 
 [dev-packages]
 black = "*"

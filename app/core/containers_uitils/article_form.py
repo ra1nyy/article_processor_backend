@@ -2,7 +2,14 @@ from app.services.article_form.article_form_repository import ArticleFormReposit
 from app.services.article_form.article_form_service import ArticleFormService
 
 
-def get_article_form_service(providers, session, config, logger, user_service):
+def get_article_form_service(
+    providers,
+    session,
+    config,
+    logger,
+    user_service,
+    file_service,
+):
     article_form_repository = providers.Factory(
         ArticleFormRepository,
         db_session=session,
@@ -14,4 +21,5 @@ def get_article_form_service(providers, session, config, logger, user_service):
         repository=article_form_repository,
         logger=logger,
         user_service=user_service,
+        file_service=file_service,
     )

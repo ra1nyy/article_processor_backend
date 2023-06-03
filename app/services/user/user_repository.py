@@ -3,12 +3,18 @@ from sqlalchemy.orm import joinedload
 
 from app.database.base_repository import BaseRepository
 from app.database.entities import UserEntity
-from app.models import UserRaw, User
+from app.models import UserRaw, User, UserRoleEnum
 
 
 class UserRepository(BaseRepository[UserRaw]):
     model = UserRaw
     entity = UserEntity
+
+    async def get_all_students(self):
+        async with self.db_session() as session:
+            query = select(UserEntity).where(UserEntity.role == UserRoleEnum.USER)
+            result = await session.execute(query)
+            return self.get_list(result.scalars())
 
     async def get_by_username(self, username: str) -> UserRaw | None:
         async with self.db_session() as session:
@@ -19,8 +25,6 @@ class UserRepository(BaseRepository[UserRaw]):
             entity = entity.scalar()
             if not entity:
                 return None
-            print('before to model')
-            print(f'{entity.__dict__ = }')
 
             return entity.to_model()
 
@@ -31,5 +35,5 @@ class UserRepository(BaseRepository[UserRaw]):
                     UserEntity.id.in_(user_ids),
                 )
             )
-            print(f'{result.scalars() = }')
+
             return self.get_list(result.scalars(), User)

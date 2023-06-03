@@ -23,6 +23,7 @@ def check_by_role(roles: List[UserRoleEnum] = None):
             **kwargs,
         ):
             token_key = _get_token(**kwargs)
+
             session = await _get_session(token_key)
             if not session:
                 raise ApiAccessError()
