@@ -1,5 +1,4 @@
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload
 
 from app.database.base_repository import BaseRepository
 from app.database.entities import UserEntity

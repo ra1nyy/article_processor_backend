@@ -1,6 +1,5 @@
 from app.api.errors import EntityNotFound
 from app.models import User, UserRaw
-from app.models.user.enums import UserRoleEnum
 from app.models.user.user_requests import UserUpdate
 from app.services import BaseService
 from app.services.user.user_repository import UserRepository

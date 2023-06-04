@@ -13,9 +13,6 @@ class ArticleFormEntity(Base, EntityBase[ArticleFormDomain]):
 
     id = sa.Column(sa.INTEGER, sa.Identity(), primary_key=True, nullable=False)
 
-    name = sa.Column(sa.VARCHAR, nullable=True)
-    annotation = sa.Column(sa.VARCHAR, nullable=True)
-
     scientific_adviser_fullname = sa.Column(sa.VARCHAR, nullable=True)
     scientific_adviser_academic_degree = sa.Column(sa.VARCHAR, nullable=True)
     scientific_adviser_academic_title = sa.Column(sa.VARCHAR, nullable=True)
@@ -81,4 +78,3 @@ class ArticleFormEntity(Base, EntityBase[ArticleFormDomain]):
         secondary="article_author",
         lazy="joined",
     )
-

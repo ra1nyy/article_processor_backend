@@ -1,6 +1,6 @@
 from typing import Annotated
 from dependency_injector.wiring import Provide, inject
-from fastapi import Depends, Request, Path
+from fastapi import Depends, Path
 
 from app.api_utils.auth_checker import check_by_role, oauth_scheme
 from app.core.containers import Container, inject_module
@@ -55,12 +55,12 @@ async def get_articles(
     "",
     response_model=ArticleFormDomain,
 )
-# @check_by_role()
+@check_by_role()
 @inject
 async def create_article(
     article_form_create: ArticleFormCreate,
     article_form_service: ArticleFormService = Depends(Provide[Container.article_form_service]),
-    # current_user: User = Depends(oauth_scheme),
+    current_user: User = Depends(oauth_scheme),
 ):
     """
     Endpoint для создания статьи

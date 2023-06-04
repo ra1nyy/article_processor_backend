@@ -2,10 +2,7 @@ from app.models.mode_base import ModelBase
 
 
 class ArticleFormBase(ModelBase):
-    """Base model for Num."""
-
-    name: str = None
-    annotation: str = None
+    """Base model for Article."""
 
     scientific_adviser_fullname: str = None
     scientific_adviser_academic_degree: str = None

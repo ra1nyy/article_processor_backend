@@ -1,7 +1,6 @@
 from app.core.config import Config
 from app.core.logger.appLogger import AppLogger
 from app.models.article_form.article_form_request import ArticleFormDomain, ArticleFormCreate, ArticleFormResponse
-from app.models.file.article_form_request import FileDomain
 from app.services import UserService
 from app.services.article_form.article_form_repository import ArticleFormRepository
 from app.services.base_service import BaseService
@@ -24,7 +23,7 @@ class ArticleFormService(BaseService[ArticleFormDomain]):
         self.user_service = user_service
         self.file_service = file_service
 
-    @BaseService.catch_db_error(entity=ArticleFormDomain.__name__, unique_field="symbol")
+    @BaseService.catch_db_error(entity=ArticleFormDomain.__name__)
     async def create_entity(self, article_to_create: ArticleFormCreate) -> ArticleFormDomain:
         authors = await self.user_service.get_users_by_list_ids(
             article_to_create.authors_ids,
@@ -41,6 +40,8 @@ class ArticleFormService(BaseService[ArticleFormDomain]):
             article_to_response,
             attached_text=article_to_create.attached_article_text,
         )
+        article_to_response.formatted_docs_id = formatted_docx.id
+        await self.repository.update(article_to_response)
 
         return ArticleFormResponse(
             **article_to_response.dict(exclude={'formatted_docs_id'}),

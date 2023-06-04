@@ -1,5 +1,3 @@
-import os.path
-
 from pydantic import BaseModel
 
 from app.utils.env_utils import load_config
@@ -52,7 +50,7 @@ class Config(BaseModel):
             refresh_token_expired_days=data_env.get("REFRESH_TOKEN_EXPIRED_DAYS", 3),
             default_items_on_page=data_env.get("DEFAULT_ITEMS_ON_PAGE", 10),
             development_routers=cls.__check_true(value=data_env.get("DEVELOPMENT_ROUTERS", False)),
-            
+
             formatted_docs_path=data_env.get('FORMATTED_DOCS_PATH'),
             attached_docs_path=data_env.get('ATTACHED_DOCS_PATH')
         )

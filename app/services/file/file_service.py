@@ -1,17 +1,12 @@
-import docx
-from docx.shared import Inches, Cm, Pt
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-
 import os
 import aiofiles
 import uuid
 from fastapi import UploadFile
 from fastapi.responses import FileResponse
 
-from app.api.errors import EntityNotFound
 from app.core.config import Config
 from app.core.logger.appLogger import AppLogger
-from app.models.article_form.article_form_request import ArticleFormDomain, ArticleFormCreate
+from app.models.article_form.article_form_request import ArticleFormDomain
 from app.models.file.article_form_request import FileDomain
 from app.services.base_service import BaseService
 from app.services.doc_service.doc_service import DocService
