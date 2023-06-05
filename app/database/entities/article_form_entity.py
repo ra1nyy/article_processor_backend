@@ -76,5 +76,5 @@ class ArticleFormEntity(Base, EntityBase[ArticleFormDomain]):
     authors: Mapped[list[UserEntity]] = relationship(
         "UserEntity",
         secondary="article_author",
-        lazy="joined",
+        lazy="selectin",
     )
