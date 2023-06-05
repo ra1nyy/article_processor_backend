@@ -46,7 +46,7 @@ class DocService:
         self._add_keywords(article)
 
         # вставка текста
-        self._add_text_body(article, attached_text)
+        self._add_text_body(attached_text)
 
         # создание списка литературы
         self._add_list_of_references(article)
@@ -159,9 +159,9 @@ class DocService:
         keywords_font.italic = True
         keywords_font.size = Pt(9)
 
-    def _add_text_body(self, article: ArticleFormDomain, attached_text: str):
+    def _add_text_body(self, attached_text: str):
         text = self.document.add_paragraph(style='Normal')
-        text.add_run(article.attached_article_text)
+        text.add_run(attached_text)
 
     def _add_list_of_references(self, article: ArticleFormDomain):
         list_of_references = self.document.add_paragraph()

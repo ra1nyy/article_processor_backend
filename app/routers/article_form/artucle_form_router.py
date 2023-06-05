@@ -4,7 +4,7 @@ from fastapi import Depends, Path
 
 from app.api_utils.auth_checker import check_by_role, oauth_scheme
 from app.core.containers import Container, inject_module
-from app.models import User
+from app.models import User, UserRoleEnum
 from app.models.article_form.article_form_request import ArticleFormDomain, ArticleFormCreate
 from app.routers.article_form.docs import article_docs
 from app.routers.custom_api_router import CustomApiRouter
@@ -19,7 +19,7 @@ article_form_router = CustomApiRouter(
 
 
 @article_form_router.get(
-    "/{article_form_id}",
+    "/{article_form_id}/",
     response_model=ArticleFormDomain,
 )
 @check_by_role()
@@ -39,7 +39,7 @@ async def get_article(
     "",
     response_model=list[ArticleFormDomain],
 )
-@check_by_role()
+@check_by_role(roles=[UserRoleEnum.ADMIN])
 @inject
 async def get_articles(
     article_form_service: ArticleFormService = Depends(Provide[Container.article_form_service]),
@@ -49,6 +49,22 @@ async def get_articles(
     Endpoint для получения всех статей
     """
     return await article_form_service.get_all_entities()
+
+
+@article_form_router.get(
+    "/my",
+    response_model=list[ArticleFormDomain],
+)
+@check_by_role()
+@inject
+async def get_user_articles(
+    article_form_service: ArticleFormService = Depends(Provide[Container.article_form_service]),
+    current_user: User = Depends(oauth_scheme),
+):
+    """
+    Endpoint для получения всех статей
+    """
+    return await article_form_service.get_all_entities_by_user_id(user_id=current_user.id)
 
 
 @article_form_router.post(

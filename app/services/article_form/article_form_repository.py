@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from app.database.base_repository import BaseRepository
 from app.database.entities import ArticleFormEntity, ArticleAutorEntity
 from app.models import User
@@ -25,3 +27,9 @@ class ArticleFormRepository(BaseRepository[ArticleFormDomain]):
             await session.commit()
 
             return article
+
+    async def get_articles_by_user_id(self, user_id: int):
+        async with self.db_session() as session:
+            query = select(self.entity).join(ArticleAutorEntity).where(ArticleAutorEntity.user_id == user_id)
+            result = await session.execute(query)
+            return self.get_list(result.scalars())

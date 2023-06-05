@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from app.core.config import Config
 from app.core.logger.appLogger import AppLogger
 from app.models.article_form.article_form_request import ArticleFormDomain, ArticleFormCreate, ArticleFormResponse
@@ -47,3 +49,6 @@ class ArticleFormService(BaseService[ArticleFormDomain]):
             **article_to_response.dict(exclude={'formatted_docs_id'}),
             formatted_docs_id=formatted_docx.id,
         )
+
+    async def get_all_entities_by_user_id(self, user_id: int):
+        return await self.repository.get_articles_by_user_id(user_id=user_id)
