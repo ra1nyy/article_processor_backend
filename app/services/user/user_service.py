@@ -30,6 +30,9 @@ class UserService(BaseService[UserRaw]):
             raise EntityNotFound("User")
         return user
 
+    async def get_by_email(self, email: str) -> UserRaw | None:
+        return await self.repository.get_by_email(email)
+
     async def get_by_id(self, user_id: int) -> UserRaw | None:
         return await self.repository.get_by_id(user_id)
 
@@ -39,7 +42,6 @@ class UserService(BaseService[UserRaw]):
         update_user_request: UserUpdate,
         user_id: int,
     ) -> User:
-        print(update_user_request.dict())
         update_user_request_with_id = UserUpdate(
             **update_user_request.dict(exclude={'id'}),
             id=user_id,

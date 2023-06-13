@@ -7,7 +7,7 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 alembic = "*"
-pydantic = "*"
+pydantic = {extras = ["email"], version = "*"}
 dependency-injector = "*"
 loguru = "*"
 pytest = "*"

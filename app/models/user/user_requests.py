@@ -1,4 +1,5 @@
-from app.models.mode_base import UpdateBase
+from pydantic import EmailStr, SecretStr
+from app.models.mode_base import UpdateBase, ModelBase
 
 
 class UserUpdate(UpdateBase):
@@ -14,3 +15,16 @@ class UserUpdate(UpdateBase):
 
     place_of_work: str | None = None
     social_network_url: str | None = None
+
+
+class UserRegisterRequest(ModelBase):
+    email: EmailStr
+    password: str
+
+    first_name: str
+    last_name: str
+    surname: str
+    username: str
+
+    place_of_study: str
+    study_group_number: str

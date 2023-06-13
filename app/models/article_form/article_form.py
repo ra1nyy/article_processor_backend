@@ -24,6 +24,8 @@ class ArticleFormBase(ModelBase):
     title_rus: str | None = None
     title_eng: str | None = None
 
+    udc: str | None = None
+
     # @validator('attached_docs_filename')
     # def validate_attached_docs(cls, value, values: dict):
     #     print(values)

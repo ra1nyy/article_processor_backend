@@ -27,6 +27,18 @@ class UserRepository(BaseRepository[UserRaw]):
 
             return entity.to_model()
 
+    async def get_by_email(self, email: str) -> UserRaw | None:
+        async with self.db_session() as session:
+
+            query = select(UserEntity).limit(1).where(UserEntity.email == email)
+            entity = await session.execute(query)
+
+            entity = entity.scalar()
+            if not entity:
+                return None
+
+            return entity.to_model()
+
     async def get_users_by_ids(self, user_ids: list):
         async with self.db_session() as session:
             result = await session.execute(

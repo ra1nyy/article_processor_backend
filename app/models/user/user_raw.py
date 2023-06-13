@@ -8,8 +8,8 @@ from app.models import User
 
 
 class UserRaw(User):
-    password_hash: str
-    password_salt: str
+    password_hash: str | None = None
+    password_salt: str | None = None
     password: str | None
 
     @root_validator(pre=True)

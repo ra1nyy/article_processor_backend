@@ -93,8 +93,7 @@ class DocService:
         udk_block = self.document.add_paragraph()
         udk_block_alignment = udk_block.paragraph_format
         udk_block_alignment.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        udk = '09'
-        udk_block.add_run(udk)
+        udk_block.add_run(article.udc)
 
     def _set_authors(self, article: ArticleFormDomain):
         # TODO:
@@ -104,12 +103,17 @@ class DocService:
 
         authors_names = []
         for author in article.authors:
-            name = f'{author.first_name} {author.last_name[0].upper()} {author.surname[0].upper()}'
-            authors_names.append(f'{name} студент бакалавр\n')
+            author_info = author.place_of_study if author.place_of_study else author.place_of_work
+            name = f'{author.last_name} {author.first_name[0].upper()}. {author.surname[0].upper()}.'
+            authors_names.append(f'{name}, студент бакалавр\n{author_info}\n')
+
+        scientific_adviser_name = self._format_scientific_adviser_name(
+            article.scientific_adviser_fullname
+        )
 
         authors_workplace = f'{article.scientific_adviser_academic_degree}, ' \
-                            f'{article.scientific_adviser_fullname}\n' \
-                            f'{article.scientific_adviser_department}'
+                            f'{scientific_adviser_name}\n' \
+                            f'{article.scientific_adviser_institute}'
 
         authors_block.add_run(''.join(authors_names)).bold = True
         authors_block.add_run('Научный руководитель:\n').bold = True
@@ -130,19 +134,22 @@ class DocService:
         abstract_format.left_indent = Cm(0.7)
 
         abstract_name_rus = 'Аннотация'
-        abstract_name_eng = 'Annotation'
+        abstract_name_eng = '\tAnnotation'
 
-        abstract_font = abstract_block.add_run(
-            abstract_name_rus +
-            '\n' +
-            article.abstract_rus +
-            '\n' +
-            abstract_name_eng +
-            '\n' +
-            article.abstract_eng
-        ).font
-        abstract_font.italic = True
-        abstract_font.size = Pt(9)
+        abstract_font_rus = abstract_block.add_run(abstract_name_rus + '\n').font
+        text_1 = abstract_block.add_run(article.abstract_rus + '\n').font
+        abstract_font_eng = abstract_block.add_run(abstract_name_eng + '\n').font
+        text_2 = abstract_block.add_run(article.abstract_eng).font
+
+        abstract_font_rus.italic = True
+        abstract_font_eng.italic = True
+        text_1.italic = True
+        text_2.italic = True
+
+        abstract_font_rus.size = Pt(9)
+        abstract_font_eng.size = Pt(9)
+        text_1.size = Pt(9)
+        text_2.size = Pt(9)
 
     def _add_keywords(self, article: ArticleFormDomain):
         keywords_block = self.document.add_paragraph()
@@ -151,9 +158,8 @@ class DocService:
         keywords_format.left_indent = Cm(0.7)
 
         keywords_font = keywords_block.add_run(
-            article.keywords_rus +
-            '\n' +
-            article.keywords_eng
+            f'Ключевые слова:\n{article.keywords_rus}\n'
+            f'\tKeywords:\n{article.keywords_eng}'
         ).font
 
         keywords_font.italic = True
@@ -165,7 +171,9 @@ class DocService:
 
     def _add_list_of_references(self, article: ArticleFormDomain):
         list_of_references = self.document.add_paragraph()
-        list_of_references.add_run(article.list_of_references).bold = True
+        list_of_references.add_run(
+            f"Список литературы\n{article.list_of_references}"
+        ).bold = True
 
     def _save_doc(
         self,
@@ -173,10 +181,15 @@ class DocService:
         filename: str,
     ) -> FileDomain:
         path = os.path.join(filepath, filename)
-        print(f'Save to: {path}')
         self.document.save(path)
         return FileDomain(
             path=path,
             name=filename,
-            size_kb=1,
+            size_kb=int(os.stat(path).st_size / 1024),
         )
+
+    def _format_scientific_adviser_name(self, name: str) -> str:
+        name_list = name.split(' ')
+        if not len(name_list) == 3:
+            return name
+        return f'{name_list[0]} {name_list[1][0].upper()}. {name_list[2][0].upper()}.'

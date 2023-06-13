@@ -3,11 +3,12 @@ from fastapi import Depends, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.api.doc_response_error import doc_response_errors
-from app.api.errors import ApiAccessError, ApiPermissionError
+from app.api.errors import ApiAccessError, ApiPermissionError, UniqueError
 from app.api_utils.auth_checker import check_by_role, oauth_scheme
 from app.core.containers import Container, inject_module
-from app.models import Token
+from app.models import Token, User
 from app.models.auth.refresh_token import RefreshToken
+from app.models.user.user_requests import UserRegisterRequest
 from app.routers.auth.docs import auth_docs
 from app.routers.custom_api_router import CustomApiRouter
 from app.services.auth.auth_service import AuthService
@@ -70,3 +71,23 @@ async def logout(
     Принудительно устанавливает текущий токен истекшим
     """
     await auth_service.logout(current_token)
+
+
+@auth_router.post(
+    "/register",
+    response_model=User,
+    responses=doc_response_errors(
+        ApiAccessError(),
+        ApiPermissionError(),
+        UniqueError('Email not unique !'),
+    ),
+)
+@inject
+async def registration(
+    user_creds: UserRegisterRequest,
+    auth_service: AuthService = Depends(Provide[Container.auth_service]),
+):
+    """
+    Принудительно устанавливает текущий токен истекшим
+    """
+    return await auth_service.register(user_creds)

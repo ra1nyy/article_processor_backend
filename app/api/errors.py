@@ -177,3 +177,9 @@ class SeedingError(HTTPException):
     def __init__(self, message: str = None):
         self.status_code = 468
         self.detail = message
+
+
+class UniqueError(HTTPException):
+    def __init__(self, message: str = None):
+        self.status_code = 470
+        self.detail = message

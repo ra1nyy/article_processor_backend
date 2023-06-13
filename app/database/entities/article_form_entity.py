@@ -60,6 +60,10 @@ class ArticleFormEntity(Base, EntityBase[ArticleFormDomain]):
         sa.VARCHAR,
         nullable=True,
     )
+    udc = sa.Column(
+        sa.VARCHAR,
+        nullable=True,
+    )
 
     created_at = sa.Column(
         sa.TIMESTAMP(True),

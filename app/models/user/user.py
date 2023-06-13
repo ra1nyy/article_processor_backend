@@ -5,7 +5,7 @@ from app.models.user.enums import UserRoleEnum
 
 
 class User(ModelBase):
-    id: int
+    id: int | None
     first_name: str
     last_name: str
     surname: str
@@ -22,4 +22,4 @@ class User(ModelBase):
     created_at: datetime = datetime.utcnow()
     updated_at: datetime = datetime.utcnow()
     last_login: datetime = datetime.utcnow()
-    is_active: bool
+    is_active: bool = True

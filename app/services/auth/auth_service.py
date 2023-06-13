@@ -1,10 +1,11 @@
 import uuid
 from datetime import datetime, timedelta
 
-from app.api.errors import ApiAccessError, EntityNotFound
+from app.api.errors import ApiAccessError, EntityNotFound, UniqueError
 from app.core.config import Config
 from app.core.logger.appLogger import AppLogger
 from app.models import Token, UserRaw, UserRoleEnum, UserSession, User
+from app.models.user.user_requests import UserRegisterRequest
 from app.services.auth.auth_respository import AuthRepository
 from app.services.base_service import BaseService
 from app.services.user.user_service import UserService
@@ -24,12 +25,17 @@ class AuthService(BaseService[User]):
         super().__init__(config=config, repository=repository, logger=logger)
         self.user_service = user_service
 
+    async def register(self, user_creds: UserRegisterRequest) -> User:
+        if await self.user_service.get_by_email(user_creds.email):
+            raise UniqueError('Email not unique !')
+
+        new_user = UserRaw(**user_creds.dict(exclude={'password'}))
+        new_user.set_new_password(user_creds.password)
+
+        return await self.user_service.create_entity(new_user)
+
     async def login(self, username: str, password: str) -> Token:
-        print('before')
-
         user = await self.user_service.get_by_username(username)
-
-        print('after')
 
         if not user:
             self.logger.exception('Entity "User" not found')
@@ -113,10 +119,6 @@ class AuthService(BaseService[User]):
         )
 
     def get_expired_at(self):
-        print(datetime.utcnow())
-        print(datetime.now() + timedelta(
-            minutes=self.config.session_expired_minutes,
-        ))
         return datetime.now() + timedelta(
             minutes=self.config.session_expired_minutes,
         )
