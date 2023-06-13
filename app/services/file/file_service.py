@@ -63,7 +63,12 @@ class FileService(BaseService[FileDomain]):
     async def load_document_metadata(self, file_id: int) -> FileDomain:
         return await self.repository.get_entity_by_id(file_id)
 
-    async def create_formatted_docx(self, article: ArticleFormDomain, attached_text: str | None) -> FileDomain | None:
+    async def create_formatted_docx(
+        self,
+        article: ArticleFormDomain,
+        attached_text: str | None,
+        filename: str,
+    ) -> FileDomain | None:
         self.__prepare_paths()
 
         if not attached_text:
@@ -72,7 +77,7 @@ class FileService(BaseService[FileDomain]):
         doc_file = self.doc_service.create_formatted_docx(
             article=article,
             attached_text=attached_text,
-            filename=f'formatted_doc_{uuid.uuid4()}.doc',
+            filename=filename,
             filepath=self.config.formatted_docs_path,
         )
 

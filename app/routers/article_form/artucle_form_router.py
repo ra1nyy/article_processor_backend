@@ -83,4 +83,5 @@ async def create_article(
     """
     return await article_form_service.create_entity(
         article_to_create=article_form_create,
+        user=current_user,
     )
