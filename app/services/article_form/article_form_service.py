@@ -48,7 +48,9 @@ class ArticleFormService(BaseService[ArticleFormDomain]):
             attached_text=article_to_create.attached_article_text,
             filename=f'{user.last_name}_Статья_{uuid.uuid4()}.doc',
         )
-        article_to_response.formatted_docs_id = formatted_docx.id
+        if formatted_docx:
+            article_to_response.formatted_docs_id = formatted_docx.id
+            
         await self.repository.update(article_to_response)
 
         return ArticleFormResponse(
